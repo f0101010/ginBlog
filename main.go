@@ -1,7 +1,11 @@
 package main
 
-import "ginBlog/routers"
+import (
+	"ginBlog/model"
+	"ginBlog/routers"
+)
 
 func main() {
+	model.InitDb()
 	routers.InitRouter()
 }
