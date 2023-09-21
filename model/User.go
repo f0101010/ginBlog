@@ -21,7 +21,7 @@ func CheckUserExist(username string) (code int) {
 	var users User
 	db.Select("id").Where("username = ?", username).First(&users)
 	if users.ID > 0 {
-		return errmsg.ERROR_USERNAME_USED // 1001
+		return errmsg.ErrorUsernameUsed // 1001
 	}
 	return errmsg.SUCCESS // 200
 }
@@ -88,4 +88,20 @@ func ScryptPassword(password string) string {
 	fpw := base64.StdEncoding.EncodeToString(HashPw)
 
 	return fpw
+}
+
+// CheckLogin 登录验证
+func CheckLogin(username, password string) int {
+	var user User
+	db.Where("username = ?", username).First(&user)
+	if user.ID == 0 {
+		return errmsg.ErrorUserNotExist
+	}
+	if ScryptPassword(password) != user.Password {
+		return errmsg.ErrorPasswordWrong
+	}
+	if user.Role != 0 {
+		return errmsg.ErrorUserNoRight
+	}
+	return errmsg.SUCCESS
 }

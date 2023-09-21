@@ -30,7 +30,7 @@ func GetCateArt(id int, pageSize int, pageNum int) ([]Article, int) {
 	var cateArtList []Article
 	err = db.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArtList).Error
 	if err != nil {
-		return nil, errmsg.ERROR_CATE_NOT_EXIST
+		return nil, errmsg.ErrorCateNotExist
 	}
 	return cateArtList, errmsg.SUCCESS
 }
@@ -40,7 +40,7 @@ func GetArticleInfo(id int) (Article, int) {
 	var art Article
 	err = db.Preload("Category").Where("id = ?", id).First(&art).Error
 	if err != nil {
-		return Article{}, errmsg.ERROR_ART_NOT_EXIST
+		return Article{}, errmsg.ErrorArtNotExist
 	}
 	return art, errmsg.SUCCESS
 }

@@ -18,8 +18,8 @@ func AddUser(c *gin.Context) {
 	if code == errmsg.SUCCESS {
 		model.CreateUser(&data)
 	}
-	if code == errmsg.ERROR_USERNAME_USED {
-		code = errmsg.ERROR_USERNAME_USED
+	if code == errmsg.ErrorUsernameUsed {
+		code = errmsg.ErrorUsernameUsed
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
@@ -60,7 +60,7 @@ func EditUser(c *gin.Context) {
 	if code == errmsg.SUCCESS {
 		model.EditUser(id, &data)
 	}
-	if code == errmsg.ERROR_USERNAME_USED {
+	if code == errmsg.ErrorUsernameUsed {
 		c.Abort()
 	}
 	c.JSON(http.StatusOK, gin.H{

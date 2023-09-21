@@ -16,8 +16,8 @@ func AddCategory(c *gin.Context) {
 	if code == errmsg.SUCCESS {
 		model.CreateCategory(&data)
 	}
-	if code == errmsg.ERROR_CATENAME_USED {
-		code = errmsg.ERROR_CATENAME_USED
+	if code == errmsg.ErrorCatenameUsed {
+		code = errmsg.ErrorCatenameUsed
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
@@ -58,7 +58,7 @@ func EditCategory(c *gin.Context) {
 	if code == errmsg.SUCCESS {
 		model.EditCategory(id, &data)
 	}
-	if code == errmsg.ERROR_CATENAME_USED {
+	if code == errmsg.ErrorCatenameUsed {
 		c.Abort()
 	}
 	c.JSON(http.StatusOK, gin.H{
