@@ -30,16 +30,15 @@ func CreateCategory(data *Category) int {
 	return errmsg.SUCCESS // 200
 }
 
-// todo 查询分类下的所有文章
-
 // GetCategory 查询分类列表
-func GetCategory(pageSize int, pageNum int) []Category {
+func GetCategory(pageSize int, pageNum int) ([]Category, int64) {
 	var cate []Category
-	err = db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Error
+	var total int64
+	err = db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Count(&total).Error
 	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
-		return nil
+		return nil, 0
 	}
-	return cate
+	return cate, total
 }
 
 // EditCategory 编辑分类信息

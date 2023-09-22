@@ -26,8 +26,6 @@ func AddCategory(c *gin.Context) {
 	})
 }
 
-// todo 查询分类下的所有文章
-
 // GetCategory 查询分类列表
 func GetCategory(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
@@ -39,12 +37,13 @@ func GetCategory(c *gin.Context) {
 	if pageNum == 0 { // 默认查询第一页
 		pageNum = 1
 	}
-	data := model.GetCategory(pageSize, pageNum)
+	data, total := model.GetCategory(pageSize, pageNum)
 	code = errmsg.SUCCESS
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
+		"total":   total,
 		"message": errmsg.GetErrMsg(code),
 	})
 }
