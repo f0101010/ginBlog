@@ -1,0 +1,1 @@
+time="2023-09-22T09:29:48+08:00" level=info Agent=PostmanRuntime/7.33.0 DataSize=551 Hostname=LAPTOP-N3CFLF1A IP=127.0.0.1 Method=GET Path="/api/v1/users?pagesize=&pagenum=" SpendTime="17 ms" Status=200
