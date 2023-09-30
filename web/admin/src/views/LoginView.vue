@@ -1,15 +1,16 @@
 <template>
     <div class="container">
         <div class="loginBox">
-            <a-form :rules="rules" :model="formdata" class="loginForm">
+            <a-form ref="loginFormRef" :rules="rules" :model="formdata" class="loginForm">
                 <a-form-item name="username">
                     <a-input v-model:value="formdata.username" placeholder="Username"> </a-input>
                 </a-form-item>
                 <a-form-item name="password">
-                    <a-input-password v-model:value="formdata.password" placeholder="Password"></a-input-password>
+                    <a-input-password v-model:value="formdata.password" placeholder="Password"
+                        v-on:keyup.enter="login"></a-input-password>
                 </a-form-item>
                 <a-form-item class="loginBtn">
-                    <a-button type="primary">登录</a-button>
+                    <a-button type="primary" @click="login">登录</a-button>
                 </a-form-item>
             </a-form>
         </div>
@@ -47,6 +48,35 @@ export default {
             },
         }
     },
+    methods: {
+        async login() {
+            try {
+                // 手动触发表单验证，等待验证结果
+                const valid = await this.$refs.loginFormRef.validate();
+
+                if (!valid) {
+                    this.$message.error('输入非法数据，请重新输入');
+                    return;
+                }
+
+                // 如果验证通过，执行登录请求
+                const { data: res } = await this.$http.post('login', this.formdata);
+
+                if (res.status !== 200) {
+                    this.$message.error(res.message);
+                } else {
+                    // 登录成功时，保存 token 到 sessionStorage
+                    window.sessionStorage.setItem('token', res.token);
+
+                    // 跳转到 '/admin' 路由
+                    this.$router.push('/admin');
+                }
+            } catch (error) {
+                this.$message.error('登录请求失败，请重试');
+            }
+        }
+
+    }
 }
 </script>
 
