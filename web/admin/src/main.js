@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { Button, Form, Input, message, Layout } from 'ant-design-vue'
+import { Button, Form, Input, message, Layout, Menu, Card, Table, Row, Col, ConfigProvider } from 'ant-design-vue'
 import axios from 'axios'
 import 'ant-design-vue/dist/reset.css'
 
@@ -27,4 +27,10 @@ app.use(store)
     .use(Input)
     .use(router)
     .use(Layout)
+    .use(Menu)
+    .use(Card)
+    .use(Table)
+    .use(Row)
+    .use(Col)
+    .use(ConfigProvider)
     .mount('#app')

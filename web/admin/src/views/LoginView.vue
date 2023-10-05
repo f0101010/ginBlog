@@ -69,7 +69,7 @@ export default {
                     window.sessionStorage.setItem('token', res.token);
 
                     // 跳转到 '/admin' 路由
-                    this.$router.push('/admin');
+                    this.$router.push('/admin/index');
                 }
             } catch (error) {
                 this.$message.error('登录请求失败，请重试');
