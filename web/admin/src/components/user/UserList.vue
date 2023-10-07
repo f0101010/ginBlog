@@ -4,20 +4,26 @@
         <a-card>
             <a-row :gutter="20">
                 <a-col :span="6">
-                    <a-input-search placeholder="输入用户名查找" enter-button />
+                    <a-input-search v-model:value="queryParam.username" placeholder="输入用户名查找" enter-button
+                        @search="getUserList" />
                 </a-col>
                 <a-col :span="4">
                     <a-button type="primary">新增用户</a-button>
                 </a-col>
             </a-row>
-            <a-table rowKey="username" :columns="columns" :pagination="paginationOption" :dataSource="userlist" bordered>
-                <template #name="{ }">
-                    <div class="actionSlot">
-                        <a-button type="primary" style="margin-right: 16px;">编辑</a-button>
-                        <a-button type="primary" danger ghost>删除</a-button>
-                    </div>
+            <a-table rowKey="username" :columns="columns" :pagination="pagination" :dataSource="userlist" bordered
+                allowClear @change="handleTableChange">
+                <template v-slot:bodyCell="{ column, record }">
+                    <template v-if="column.dataIndex === 'action'">
+                        <div class="actionSlot">
+                            <a-button type="primary" style="margin-right: 16px;">编辑</a-button>
+                            <a-button type="primary" danger ghost @click="deleteUser(record.ID)">删除</a-button>
+                        </div>
+                    </template>
+                    <template v-if="column.dataIndex === 'role'">
+                        <span>{{ record.role === 1 ? '管理员' : "普通用户" }}</span>
+                    </template>
                 </template>
-
             </a-table>
         </a-card>
     </div>
@@ -25,6 +31,7 @@
 
 
 <script>
+
 const columns = [
     {
         title: 'ID',
@@ -46,41 +53,32 @@ const columns = [
         width: '20%',
         key: 'role',
         align: 'center',
-        customRender: (text) => {
-            return text.value == 1 ? '管理员' : '普通用户'
-        }
     },
     {
         title: '操作',
         width: '30%',
         key: 'action',
-        slots: { customRender: 'name' }
+        dataIndex: 'action',
     },
 ]
 
 export default {
     data() {
         return {
-            paginationOption: {
+            pagination: {
                 pageSizeOptions: ['5', '10', '20'],
-                defaultCurrent: 1,
-                defaultPageSize: 5,
+                pageSize: 5,
                 total: 0,
                 showSizeChanger: true,
                 showTotal: (total) => `共${total}条`,
-                onChange: (current, pageSize) => {
-                    this.paginationOption.defaultCurrent = current
-                    this.paginationOption.defaultPageSize = pageSize
-                    this.getUserList()
-                },
-                showSizeChange: (current, size) => {
-                    this.paginationOption.defaultCurrent = current
-                    this.paginationOption.defaultPageSize = size
-                    this.getUserList()
-                },
             },
             userlist: [],
             columns,
+            queryParam: {
+                username: '',
+                pagenum: 1,
+                pagesize: 5,
+            },
         }
     },
     created() {
@@ -90,13 +88,52 @@ export default {
         async getUserList() {
             const { data: res } = await this.$http.get('users', {
                 params: {
-                    pagesize: this.PageSize,
-                    pagenum: this.defaultCurrent,
+                    username: this.queryParam.username,
+                    pagesize: this.queryParam.pagesize,
+                    pagenum: this.queryParam.pagenum,
                 },
             })
             if (res.status !== 200) return this.$message.error(res.message)
             this.userlist = res.data
-            this.paginationOption.total = res.total
+            this.pagination.total = res.total
+        },
+
+        // 更改页码
+        handleTableChange(pagination) {
+            var pager = { ...this.pagination }
+            pager.current = pagination.current
+            pager.pageSize = pagination.pageSize
+            this.queryParam.pagesize = pagination.pageSize
+            this.queryParam.pagenum = pagination.current
+
+
+            if (pagination.pageSize !== this.pagination.pageSize) {
+                this.queryParam.pagenum = 1
+                pager.current = 1
+            }
+            this.pagination = pager
+            this.getUserList()
+        },
+
+        // 删除用户
+        deleteUser(id) {
+            this.$confirm({
+                title: '确定要删除该用户吗?',
+                content: '一旦删除，无法恢复',
+                okText: 'Yes',
+                okType: 'danger',
+                cancelText: 'No',
+                onOk: async () => {
+                    const res = await this.$http.delete(`user/${id}`)
+                    if (res.status !== 200) return this.$message.error(res.message)
+                    this.$message.success('删除成功')
+                    this.getUserList()
+                },
+                onCancel: () => {
+                    this.$message.info('已取消删除')
+                },
+            });
+
         },
     },
 }
