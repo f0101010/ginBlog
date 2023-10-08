@@ -20,6 +20,7 @@ func InitRouter() {
 		// User module routing
 		auth.PUT("user/:id", v1.EditUser)
 		auth.DELETE("user/:id", v1.DeleteUser)
+		auth.PUT("reset/:id", v1.ResetPassword)
 
 		// Category module routing
 		auth.POST("category/add", v1.AddCategory)
@@ -38,6 +39,7 @@ func InitRouter() {
 	{
 		routerV1.POST("user/add", v1.AddUser)
 		routerV1.GET("users", v1.GetUsers)
+		routerV1.GET("user/:id", v1.GetUser)
 		routerV1.GET("category", v1.GetCategory)
 		routerV1.GET("article", v1.GetArticle)
 		routerV1.GET("article/list/:id", v1.GetCateArt)

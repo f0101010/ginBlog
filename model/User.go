@@ -18,9 +18,22 @@ type User struct {
 
 // CheckUserExist 查询用户是否存在
 func CheckUserExist(username string) (code int) {
-	var users User
-	db.Select("id").Where("username = ?", username).First(&users)
-	if users.ID > 0 {
+	var user User
+	db.Select("id").Where("username = ?", username).First(&user)
+	if user.ID > 0 {
+		return errmsg.ErrorUsernameUsed // 1001
+	}
+	return errmsg.SUCCESS // 200
+}
+
+// CheckUpUserExist 编辑时查询用户是否存在
+func CheckUpUserExist(id int, username string) (code int) {
+	var user User
+	db.Select("id,username").Where("username = ?", username).First(&user)
+	if user.ID == uint(id) {
+		return errmsg.SUCCESS // 200
+	}
+	if user.ID > 0 {
 		return errmsg.ErrorUsernameUsed // 1001
 	}
 	return errmsg.SUCCESS // 200
@@ -36,17 +49,25 @@ func CreateUser(data *User) int {
 	return errmsg.SUCCESS // 200
 }
 
+// GetUser 查询单个用户
+func GetUser(id int) (User, int) {
+	var user User
+	err = db.Where("ID = ?", id).First(&user).Error
+	if err != nil {
+		return user, errmsg.ERROR
+	}
+	return user, errmsg.SUCCESS
+}
+
 // GetUsers 查询用户列表
 func GetUsers(username string, pageSize int, pageNum int) ([]User, int64) {
-	var user User
 	var users []User
 	var total int64
 
-	db.Model(&user).Count(&total)
 	if username == "" {
-		err = db.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+		err = db.Select("id,username,role").Find(&users).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
 	}
-	err = db.Where("username LIKE ?", username+"%").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error
+	err = db.Select("id,username,role").Where("username LIKE ?", username+"%").Find(&users).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
 
 	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
 		return nil, 0
@@ -60,6 +81,20 @@ func EditUser(id int, data *User) int {
 	var maps = make(map[string]interface{})
 	maps["username"] = data.Username
 	maps["role"] = data.Role
+	err = db.Model(&user).Where("id = ?", id).Updates(maps).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+
+	return errmsg.SUCCESS
+}
+
+// ResetPassword 重置密码
+func ResetPassword(id int, data *User) int {
+	var user User
+	var maps = make(map[string]interface{})
+	data.Password = ScryptPassword(data.Password)
+	maps["password"] = data.Password
 	err = db.Model(&user).Where("id = ?", id).Updates(maps).Error
 	if err != nil {
 		return errmsg.ERROR
