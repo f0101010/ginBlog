@@ -59,6 +59,7 @@ func GetArticleInfo(c *gin.Context) {
 func GetArticle(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	title := c.Query("title")
 
 	if pageSize == 0 {
 		pageSize = -1
@@ -66,7 +67,7 @@ func GetArticle(c *gin.Context) {
 	if pageNum == 0 { // 默认查询第一页
 		pageNum = 1
 	}
-	data, code, total := model.GetArticle(pageSize, pageNum)
+	data, code, total := model.GetArticle(title, pageSize, pageNum)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,

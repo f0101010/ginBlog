@@ -10,6 +10,10 @@ import (
 func InitRouter() {
 	gin.SetMode(utils.AppMode)
 	r := gin.New()
+	err := r.SetTrustedProxies([]string{"127.0.0.1"})
+	if err != nil {
+		return
+	}
 	r.Use(middleware.Logger())
 	r.Use(gin.Recovery())
 	r.Use(middleware.Cors())
@@ -37,9 +41,11 @@ func InitRouter() {
 	}
 	routerV1 := r.Group("api/v1")
 	{
+
 		routerV1.POST("user/add", v1.AddUser)
 		routerV1.GET("users", v1.GetUsers)
 		routerV1.GET("user/:id", v1.GetUser)
+		routerV1.GET("category/:id", v1.GetCateInfo)
 		routerV1.GET("category", v1.GetCategory)
 		routerV1.GET("article", v1.GetArticle)
 		routerV1.GET("article/list/:id", v1.GetCateArt)
@@ -47,5 +53,8 @@ func InitRouter() {
 		routerV1.POST("login", v1.Login)
 	}
 
-	r.Run(utils.HttpPort)
+	err = r.Run(utils.HttpPort)
+	if err != nil {
+		return
+	}
 }

@@ -102,6 +102,7 @@ const columns = [
         width: '30%',
         key: 'action',
         dataIndex: 'action',
+        align: 'center',
     },
 
 ]
