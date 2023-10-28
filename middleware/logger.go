@@ -24,7 +24,7 @@ func Logger() gin.HandlerFunc {
 	logger.SetLevel(logrus.DebugLevel)
 	logWriter, _ := rotatelogs.New(
 		filePath+"%Y%m%d.log",
-		rotatelogs.WithMaxAge(7*24*time.Hour),
+		rotatelogs.WithMaxAge(3*24*time.Hour),
 		rotatelogs.WithRotationTime(24*time.Hour),
 		rotatelogs.WithLinkName(linkName),
 	)

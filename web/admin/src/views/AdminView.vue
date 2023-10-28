@@ -1,13 +1,12 @@
 <template>
-    <a-layout class="container">
+    <a-layout class="container" has-sider>
         <NavBar></NavBar>
-
-        <a-layout>
+        <a-layout :style="{ marginLeft: '200px' }">
             <a-layout-header class="headerBtn">
                 <HeaderTop></HeaderTop>
             </a-layout-header>
-            <a-layout-content>
-                <RouterView></RouterView>
+            <a-layout-content :style="{ margin: '24px 16px 0', overflow: 'initial' }">
+                <RouterView :key="$route.path"></RouterView>
             </a-layout-content>
             <a-layout-footer>
                 <FooterBar></FooterBar>

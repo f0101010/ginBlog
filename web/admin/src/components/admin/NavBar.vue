@@ -1,5 +1,6 @@
 <template>
-    <a-layout-sider breakpoint="lg">
+    <a-layout-sider breakpoint="lg"
+        :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0, top: 0, bottom: 0 }">
         <div class="logo">
             <span>My Blog</span>
         </div>
@@ -69,13 +70,13 @@ export default {
                 },
             ]),
         };
+
     },
     methods: {
         goTopage({ key }) {
-            this.$router.push('/admin' + `/${key}`);
+            this.$router.push('/' + `${key}`);
         },
     }
-
 }
 </script>
 

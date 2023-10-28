@@ -12,7 +12,7 @@
 }
 
 .footer span {
-
+    margin-top: 10px;
     font-size: 18px;
     height: 100%;
 }

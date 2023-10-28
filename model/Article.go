@@ -52,13 +52,15 @@ func GetArticle(title string, pageSize int, pageNum int) ([]Article, int, int64)
 	var err error
 	var total int64
 	if title == "" {
-		err = db.Preload("Category").Find(&articleList).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+		err = db.Order("Updated_At DESC").Preload("Category").Find(&articleList).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+		db.Model(&articleList).Count(&total)
 		if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
 			return nil, errmsg.ERROR, 0
 		}
 		return articleList, errmsg.SUCCESS, total
 	}
-	err = db.Preload("Category").Where("title LIKE ?", title+"%").Find(&articleList).Count(&total).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+	err = db.Where("Update_At DESC").Preload("Category").Where("title LIKE ?", title+"%").Find(&articleList).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
+	db.Model(&articleList).Where("title LIKE ?", title+"%").Count(&total)
 	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
 		return nil, errmsg.ERROR, 0
 	}

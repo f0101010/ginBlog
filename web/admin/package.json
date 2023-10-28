@@ -9,9 +9,11 @@
   },
   "dependencies": {
     "@ant-design/icons-vue": "^7.0.0",
+    "@tinymce/tinymce-vue": "^5.1.1",
     "ant-design-vue": "^4.0.3",
     "axios": "^1.5.1",
     "core-js": "^3.8.3",
+    "tinymce": "^6.7.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"

@@ -24,7 +24,7 @@ func UploadFile(file multipart.File, fileSize int64) (string, int) {
 	upToken := putPolicy.UploadToken(mac)
 
 	cfg := storage.Config{
-		Zone:          &storage.ZoneHuadong,
+		Zone:          &storage.ZoneHuadongZheJiang2,
 		UseCdnDomains: false,
 		UseHTTPS:      false,
 	}

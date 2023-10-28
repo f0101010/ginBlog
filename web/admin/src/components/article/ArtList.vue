@@ -7,7 +7,7 @@
                         @search="getArtList" />
                 </a-col>
                 <a-col :span="4">
-                    <a-button type="primary" @click="addArtVisible = true">新增文章</a-button>
+                    <a-button type="primary" @click="$router.push(`/addart`)">新增文章</a-button>
                 </a-col>
 
                 <a-col :span="6" :offset="4">
@@ -28,7 +28,8 @@
                     </template>
                     <template v-if="column.dataIndex === 'action'">
                         <div class="actionSlot">
-                            <a-button type="primary" style="margin-right:16px;" @click="editArt(record.ID)">编辑</a-button>
+                            <a-button type="primary" style="margin-right:16px;"
+                                @click="$router.push(`/addart/${record.ID}`)">编辑</a-button>
                             <a-button type="primary" danger ghost style="margin-right:16px;"
                                 @click="deleteArt(record.ID)">删除</a-button>
                         </div>
@@ -190,6 +191,7 @@ export default {
         }
     },
 }
+
 </script>
 
 

@@ -2,9 +2,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { Button, Form, Input, message, Layout, Menu, Card, Table, Row, Col, ConfigProvider, Modal, Switch, Select } from 'ant-design-vue'
+import { Button, Form, Input, message, Layout, Menu, Card, Table, Row, Col, ConfigProvider, Modal, Switch, Select, Upload } from 'ant-design-vue'
 import axios from 'axios'
 import 'ant-design-vue/dist/reset.css'
+import './assets/css/style.css'
 
 
 const app = createApp(App)
@@ -43,4 +44,5 @@ app.use(store)
     .use(Modal)
     .use(Switch)
     .use(Select)
+    .use(Upload)
     .mount('#app')
