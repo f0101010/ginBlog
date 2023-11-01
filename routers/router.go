@@ -45,6 +45,9 @@ func InitRouter() {
 
 		// Upload file
 		auth.POST("upload", v1.Upload)
+
+		// Update profile
+		auth.PUT("profile/:id", v1.UpdateProfile)
 	}
 	routerV1 := r.Group("api/v1")
 	{
@@ -58,6 +61,7 @@ func InitRouter() {
 		routerV1.GET("article/list/:id", v1.GetCateArt)
 		routerV1.GET("article/info/:id", v1.GetArticleInfo)
 		routerV1.POST("login", v1.Login)
+		routerV1.GET("profile/:id", v1.GetProfile)
 	}
 
 	err = r.Run(utils.HttpPort)

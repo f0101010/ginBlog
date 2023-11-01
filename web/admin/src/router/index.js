@@ -8,6 +8,7 @@ import AddArt from '../components/article/AddArt.vue'
 import ArtList from '../components/article/ArtList.vue'
 import CateList from '../components/category/CateList.vue'
 import UserList from '../components/user/UserList.vue'
+import ProfileIndex from '../components/user/ProfileIndex.vue'
 
 const routes = [
   {
@@ -26,6 +27,7 @@ const routes = [
       { path: 'artlist', component: ArtList },
       { path: 'catelist', component: CateList },
       { path: 'userlist', component: UserList },
+      { path: 'profileindex', component: ProfileIndex },
     ]
   },
 

@@ -20,6 +20,7 @@ import {
     FormOutlined,
     FrownOutlined,
     SnippetsOutlined,
+    SettingOutlined,
 } from '@ant-design/icons-vue';
 
 export default {
@@ -67,6 +68,12 @@ export default {
                             title: '文章列表',
                         },
                     ],
+                },
+                {
+                    key: 'profileindex',
+                    icon: () => h(SettingOutlined),
+                    label: '个人设置',
+                    title: '个人设置',
                 },
             ]),
         };

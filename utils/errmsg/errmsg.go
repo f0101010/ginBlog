@@ -23,22 +23,26 @@ const (
 
 	ErrorCatenameUsed = 3001
 	ErrorCateNotExist = 3002
+
+	// code = 4000... 个人信息模块的错误
+	ErrorProfileNotExist = 4001
 )
 
 var codeMsg = map[int]string{
-	SUCCESS:            "OK",
-	ERROR:              "FAIL",
-	ErrorUsernameUsed:  "用户名已存在",
-	ErrorPasswordWrong: "密码错误",
-	ErrorUserNotExist:  "用户不存在",
-	ErrorTokenExist:    "TOKEN不存在",
-	ErrorTokenRuntime:  "TOKEN已过期",
-	ErrorTokenWrong:    "TOKEN不正确",
-	ErrorTokenType:     "TOKEN格式错误",
-	ErrorCatenameUsed:  "该分类已存在",
-	ErrorArtNotExist:   "该文章不存在",
-	ErrorCateNotExist:  "该分类不存在",
-	ErrorUserNoRight:   "该用户无权限",
+	SUCCESS:              "OK",
+	ERROR:                "FAIL",
+	ErrorUsernameUsed:    "用户名已存在",
+	ErrorPasswordWrong:   "密码错误",
+	ErrorUserNotExist:    "用户不存在",
+	ErrorTokenExist:      "TOKEN不存在",
+	ErrorTokenRuntime:    "TOKEN已过期",
+	ErrorTokenWrong:      "TOKEN不正确",
+	ErrorTokenType:       "TOKEN格式错误",
+	ErrorCatenameUsed:    "该分类已存在",
+	ErrorArtNotExist:     "该文章不存在",
+	ErrorCateNotExist:    "该分类不存在",
+	ErrorUserNoRight:     "该用户无权限",
+	ErrorProfileNotExist: "该用户不存在",
 }
 
 func GetErrMsg(code int) string {

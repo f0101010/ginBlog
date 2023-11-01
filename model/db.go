@@ -24,7 +24,7 @@ func InitDb() {
 		fmt.Println("连接数据库失败，请检查参数：", err)
 	}
 
-	db.AutoMigrate(&User{}, &Article{}, &Category{})
+	db.AutoMigrate(&User{}, &Article{}, &Category{}, &Profile{})
 
 	sqlDB, _ := db.DB()
 
