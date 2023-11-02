@@ -1,7 +1,6 @@
 package model
 
 import (
-	"errors"
 	"ginBlog/utils/errmsg"
 	"gorm.io/gorm"
 )
@@ -47,21 +46,35 @@ func GetArticleInfo(id int) (Article, int) {
 }
 
 // GetArticle 查询文章列表
-func GetArticle(title string, pageSize int, pageNum int) ([]Article, int, int64) {
+func GetArticle(pageSize int, pageNum int) ([]Article, int, int64) {
 	var articleList []Article
 	var err error
 	var total int64
-	if title == "" {
-		err = db.Order("Updated_At DESC").Preload("Category").Find(&articleList).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
-		db.Model(&articleList).Count(&total)
-		if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
-			return nil, errmsg.ERROR, 0
-		}
-		return articleList, errmsg.SUCCESS, total
+
+	err = db.Select("articles.id, title, img, created_at, updated_at, `desc`, category.name").Limit(pageSize).Offset((pageNum - 1) * pageSize).
+		Order("Created_At DESC").Joins("Category").Find(&articleList).Error
+	// 单独计数
+	db.Model(&articleList).Count(&total)
+	if err != nil {
+		return nil, errmsg.ERROR, 0
 	}
-	err = db.Where("Update_At DESC").Preload("Category").Where("title LIKE ?", title+"%").Find(&articleList).Limit(pageSize).Offset((pageNum - 1) * pageSize).Error
-	db.Model(&articleList).Where("title LIKE ?", title+"%").Count(&total)
-	if err != nil && !errors.Is(gorm.ErrRecordNotFound, err) {
+	return articleList, errmsg.SUCCESS, total
+}
+
+// SearchArticle 搜索文章标题
+func SearchArticle(title string, pageSize int, pageNum int) ([]Article, int, int64) {
+	var articleList []Article
+	var err error
+	var total int64
+	err = db.Select("articles.id ,title, img, created_at, updated_at, `desc`, category.name").Order("Created_At DESC").Joins("Category").Where("title LIKE ?",
+		title+"%",
+	).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&articleList).Error
+	//单独计数
+	db.Model(&articleList).Where("title LIKE ?",
+		title+"%",
+	).Count(&total)
+
+	if err != nil {
 		return nil, errmsg.ERROR, 0
 	}
 	return articleList, errmsg.SUCCESS, total

@@ -61,14 +61,28 @@ func GetArticle(c *gin.Context) {
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
 	title := c.Query("title")
 
-	if pageSize == 0 {
-		pageSize = -1
+	switch {
+	case pageSize >= 100:
+		pageSize = 100
+	case pageSize <= 0:
+		pageSize = 10
 	}
-	if pageNum == 0 { // 默认查询第一页
+
+	if pageNum == 0 {
 		pageNum = 1
 	}
-	data, code, total := model.GetArticle(title, pageSize, pageNum)
+	if len(title) == 0 {
+		data, code, total := model.GetArticle(pageSize, pageNum)
+		c.JSON(http.StatusOK, gin.H{
+			"status":  code,
+			"data":    data,
+			"total":   total,
+			"message": errmsg.GetErrMsg(code),
+		})
+		return
+	}
 
+	data, code, total := model.SearchArticle(title, pageSize, pageNum)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
