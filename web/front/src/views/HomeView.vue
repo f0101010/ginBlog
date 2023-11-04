@@ -9,7 +9,7 @@
             <NavBar></NavBar>
           </v-col>
           <v-col>
-            <v-sheet min-height="80vh" rounded="lg">
+            <v-sheet max-width="55vw" min-height="80vh" rounded="lg">
               <router-view></router-view>
             </v-sheet>
           </v-col>
@@ -25,14 +25,12 @@
 import TopBar from '../components/TopBar.vue'
 import FooterContent from '../components/FooterContent.vue'
 import NavBar from '../components/NavBar.vue'
-// import ArticleList from '../components/ArticleList.vue'
 
 export default {
   components: {
     TopBar,
     FooterContent,
     NavBar,
-    // ArticleList
   }
 }
 </script>

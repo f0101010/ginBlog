@@ -1,6 +1,6 @@
 <template>
     <v-col>
-        <v-card class="ma-3" v-for="item in artList" :key="item.id" link>
+        <v-card class="ma-3" v-for="item in artList" :key="item.id" link @click="$router.push(`article/detail/${item.ID}`)">
             <v-row no-gutters>
                 <v-col class="d-fiex justify-center aligin-center mx-3" cols="1">
                     <v-img max-height="100" max-width="100" :src="item.img"></v-img>
@@ -14,7 +14,7 @@
                     <v-divider></v-divider>
                     <v-card-text>
                         <v-icon icon="mdi-calendar-month" />
-                        <span>{{ item.CreatedAt }}</span>
+                        <span>{{ this.$moment(item.CreatedAt).format('YYYY-MM-DD HH:MM') }}</span>
                     </v-card-text>
                 </v-col>
             </v-row>

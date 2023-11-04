@@ -1,6 +1,16 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ArticleList from '../components/ArticleList.vue'
+
+const HomeView = () =>
+  import(/* webpackChunkName: "group-index" */ '../views/HomeView.vue')
+const ArticleList = () =>
+  import(/* webpackChunkName: "group-article" */ '../components/ArticleList.vue')
+const ArticleDetails = () =>
+  import(/* webpackChunkName: "group-detail" */ '../components/ArticleDetails.vue')
+const CategoryList = () =>
+  import(/* webpackChunkName: "group-category" */ '../components/CategoryList.vue')
+const SearchResult = () =>
+  import(/* webpackChunkName: "group-search" */ '../components/SearchResult.vue')
+
 
 const routes = [
   {
@@ -14,7 +24,32 @@ const routes = [
         meta: {
           title: '欢迎来到GInBlog'
         }
-      }
+      },
+      {
+        path: '/article/detail/:id',
+        component: ArticleDetails,
+        meta: {
+          title: '文章详情'
+        },
+        props: true
+      },
+
+      {
+        path: '/category/:cid',
+        component: CategoryList,
+        meta: {
+          title: '分类信息'
+        },
+        props: true
+      },
+      {
+        path: '/search/:title',
+        component: SearchResult,
+        meta: {
+          title: '搜索结果'
+        },
+        props: true
+      },
     ]
   },
 ]

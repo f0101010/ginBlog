@@ -28,7 +28,8 @@ func CreateArticle(data *Article) int {
 func GetCateArt(id int, pageSize int, pageNum int) ([]Article, int, int64) {
 	var cateArtList []Article
 	var total int64
-	var err = db.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArtList).Count(&total).Error
+	var err = db.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArtList).Error
+	db.Model(&cateArtList).Where("cid =?", id).Count(&total)
 	if err != nil {
 		return nil, errmsg.ErrorCateNotExist, 0
 	}
